@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.domain</groupId>
+    <artifactId>integration-framework</artifactId>
+    <version>${revision}</version>
+    <modules>
+        <module>app-core</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <properties>
+        <!--  General Config Properties  -->
+        <revision>1.0-SNAPSHOT</revision>
+        <targetJdk>1.8</targetJdk>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!--  maven  -->
+        <maven.surefire-plugin.version>2.22.2</maven.surefire-plugin.version>
+        <maven.compiler-plugin.version>3.8.1</maven.compiler-plugin.version>
+        <maven.dependency-plugin.version>3.0.0</maven.dependency-plugin.version>
+        <maven.flatten.version>1.2.5</maven.flatten.version>
+        <maven.enforcer.version>3.0.0-M2</maven.enforcer.version>
+        <!--  jboss / jee  -->
+        <jboss.management.http.port>9990</jboss.management.http.port>
+        <jboss-ejb3-ext-api.version>2.2.0.Final-redhat-1</jboss-ejb3-ext-api.version>
+        <javax.javaee-api.version>8.0</javax.javaee-api.version>
+        <jboss.bom.eap.version>7.2.4.GA</jboss.bom.eap.version>
+
+        <!--  tools  -->
+        <tools.slf4j-api.version>1.7.25</tools.slf4j-api.version>
+        <tools.guava.version>24.1-jre</tools.guava.version>
+        <tools.lombok.version>1.18.12</tools.lombok.version>
+        <tools.apache-commons-lang.version>3.7</tools.apache-commons-lang.version>
+        <tools.mapstruct.version>1.4.1.Final</tools.mapstruct.version>
+        <!--  tests  -->
+        <tools.junit.version>4.12</tools.junit.version>
+        <tools.junit.jupiter.version>5.6.0</tools.junit.jupiter.version>
+        <tools.dbunit.version>2.7.0</tools.dbunit.version>
+        <tools.apache-dbutils.version>1.7</tools.apache-dbutils.version>
+        <tools.slf4j-simple.version>1.7.30</tools.slf4j-simple.version>
+        <tools.slf4j-jdk14.version>1.7.30</tools.slf4j-jdk14.version>
+        <tools.slf4j-log4j12.version>1.7.30</tools.slf4j-log4j12.version>
+        <tools.log4j.version>1.2.17</tools.log4j.version>
+        <tools.logback.classic.version>1.2.3</tools.logback.classic.version>
+        <version.server.bom>18.0.0.Final</version.server.bom>
+        <mybatis.cdi.version>1.1.1</mybatis.cdi.version>
+
+
+        <!--  Database Tools  -->
+        <tools.posgresql.driver.version>42.2.18</tools.posgresql.driver.version>
+        <tools.mybatis.version>3.5.6</tools.mybatis.version>
+
+        <!--  datasources jndi  -->
+        <datasources.integration.framework.jndi>java:jboss/datasources/IntegrationFrameworkDS</datasources.integration.framework.jndi>
+    </properties>
+
+
+    <!-- Plugin Management -->
+
+    <dependencyManagement>
+        <dependencies>
+            <!--  ================================================================================================
+                       INTEGRATION FRAMEWORK
+                       ===================================================================================================  -->
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-javaee8-with-tools</artifactId>
+                <version>${jboss.bom.eap.version}</version>
+                <type>pom</type>
+<!--                <scope>import</scope>-->
+            </dependency>
+
+
+            <!--  =====================  -->
+            <!--  JEE / JBOSS  -->
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${javax.javaee-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!--  =====================  -->
+            <!--  TOOLS  -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${tools.slf4j-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${tools.apache-commons-lang.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${tools.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${tools.lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${jaxb-impl.version}</version>
+            </dependency>
+            <!--  =====================  -->
+            <!--  TESTS  -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${tools.slf4j-simple.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>${tools.slf4j-jdk14.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${tools.slf4j-log4j12.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${tools.log4j.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${tools.logback.classic.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${tools.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${tools.junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.dbunit</groupId>
+                <artifactId>dbunit</artifactId>
+                <version>${tools.dbunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- DATABASE CONNECTION -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${tools.posgresql.driver.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${tools.mybatis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-dbutils</groupId>
+                <artifactId>commons-dbutils</artifactId>
+                <version>${tools.apache-dbutils.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${tools.mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-cdi</artifactId>
+                <version>${mybatis.cdi.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--  =====================  -->
+    <!--  BUILD  -->
+    <build>
+        <!--  remove version from default name  -->
+        <finalName>${project.artifactId}</finalName>
+        <!--  filter resources by default  -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+        <!--  PLUGINS config  -->
+        <pluginManagement>
+
+            <plugins>
+                <!-- To manage the transformation of ${revision} to 1.0-SNAPSHOT-->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${maven.flatten.version}</version>
+                    <configuration>
+                        <flattenMode>bom</flattenMode>
+                    </configuration>
+                    <executions>
+                        <!--   enable flattening-->
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <!--  Ensure proper cleanup-->
+                        <execution>
+                            <id>flatten.cleanup</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+
+                    </executions>
+
+                </plugin>
+                <!--  JAVAC  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler-plugin.version}</version>
+                    <configuration>
+                        <compilerVersion>1.8</compilerVersion>
+                        <fork>true</fork>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <generatedSourcesDirectory>${project.build.directory}/generated-sources/annotations</generatedSourcesDirectory>
+                        <showDeprecation>true</showDeprecation>
+                        <annotationProcessorPaths>
+                        <!--     For POJO mapping-->
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${tools.mapstruct.version}</version>
+                            </path>
+                        <!--     For POJO GETTERS, SETTERS GENERATION AND MORE -->
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${tools.lombok.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+                <!--  SUREFIRE  -->
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire-plugin.version}</version>
+                    <!--  exclude integration tests by default  -->
+                    <configuration>
+                        <excludes>
+                            <exclude>**/*IntegrationTest</exclude>
+                            <exclude>**/*IT</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <!--  include integration tests in integration-test phase only  -->
+                        <execution>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <excludes>
+                                    <exclude>none</exclude>
+                                </excludes>
+                                <includes>
+                                    <include>**/*IntegrationTest</include>
+                                    <include>**/*IT</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!--  JAR  -->
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                </plugin>
+                <!--  WAR  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <webResources>
+                            <resource>
+                                <directory>src/main/webapp</directory>
+                                <filtering>true</filtering>
+                            </resource>
+                        </webResources>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>class</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                </plugin>
+                <!--  EJB  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <configuration>
+                        <ejbVersion>3.1</ejbVersion>
+                    </configuration>
+                </plugin>
+                <!--  EAR  -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <configuration>
+                        <!--                         <outputFileNameMapping>@{artifactId}@-@{version}@.@{extension}@</outputFileNameMapping> -->
+                        <outputFileNameMapping>@{artifactId}@.@{extension}@</outputFileNameMapping>
+                        <defaultLibBundleDir>lib</defaultLibBundleDir>
+                        <version>7</version>
+                        <filtering>true</filtering>
+                    </configuration>
+                </plugin>
+                <!--  MAVEN  -->
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven.dependency-plugin.version}</version>
+                </plugin>
+                <!--  JBOSS DEPLOY  -->
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>2.0.1.Final</version>
+                    <executions>
+                        <execution>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>deploy-only</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <port>${jboss.management.http.port}</port>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+
+
+</project>

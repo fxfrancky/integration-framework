@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.domain.mybatis.mappers.UserMapper" >
+
+    <resultMap id="UserMap" type="com.domain.model.User" >
+        <id  property="idUser" column="id_user" jdbcType="INTEGER" />
+        <!--        <result  property="login" column="LOGIN" jdbcType="VARCHAR" />-->
+        <!--        <result  property="password" column="PASSWORD" jdbcType="VARCHAR" />-->
+        <!--        <result  property="email" column="EMAIL" jdbcType="VARCHAR" />-->
+    </resultMap>
+
+
+    <select id="selectUsers" resultMap="UserMap">
+        SELECT *
+        FROM public.user
+    </select>
+
+    <select id="getUserByIdUser" resultMap="UserMap">
+        SELECT *
+        FROM public.user
+        WHERE        id_user = #{idUser}
+    </select>
+
+</mapper>
