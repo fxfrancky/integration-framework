@@ -11,15 +11,36 @@
     </resultMap>
 
 
-    <select id="selectUsers" resultMap="UserMap">
+    <select id="selectUsers"  resultMap="UserMap">
         SELECT *
         FROM public.user
     </select>
 
-    <select id="getUserByIdUser" resultMap="UserMap">
+    <select id="getUserByLogin" resultMap="UserMap">
         SELECT *
         FROM public.user
-        WHERE        id_user = #{idUser}
+        WHERE        login = #{login}
     </select>
 
+
+    <insert id="insertNewUser" parameterType="User">
+<!--        <selectKey keyProperty="id_user" resultType="Integer" order="BEFORE">-->
+<!--            select NEXTVAL('public.user_id_user_seq')-->
+<!--        </selectKey>-->
+        INSERT INTO public.user(
+        login, password, email)
+        VALUES (#{login}, #{password},  #{email});
+        <selectKey keyProperty = "id_user" resultType = "Integer" order = "AFTER">
+            select NEXTVAL('public.user_id_user_seq')
+        </selectKey>
+    </insert>
+
+<!--    <insert id="insertUser" re-->
+<!--    -->
+<!--    @Insert("INSERT INTO MyBooks(Author, Title, Published, Remark) "-->
+<!--    + "VALUES(#{author}, #{title}, #{published}, #{remark})")-->
+<!--    Integer idUser, String login, String password, String email-->
+
+<!--    nextval('user_id_user_seq'-->
+    
 </mapper>

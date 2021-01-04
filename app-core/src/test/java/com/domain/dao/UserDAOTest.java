@@ -3,8 +3,6 @@ package com.domain.dao;
 import com.domain.model.User;
 import com.domain.tools.CollectionsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.util.StringUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -35,22 +33,39 @@ public class UserDAOTest {
                 System.out.println("User ID : " + user.getIdUser() + " User LOGIN : " + user.getLogin() + " User EMAIL : " + user.getEmail() + " User PASSWORD : " + user.getPassword());
             });
         }
-
-
-        assertEquals(userList.size(),6);
+        assertNotNull(userList);
+        assertEquals(userList.size(),7);
     }
 
     @Test
-    void testFindUserById() throws Exception {
+    void testFindUserByLogin() throws Exception {
 
-        Integer idUser = 101;
-        User usr = userDAO.getUserByIdUser(idUser);
+        String login  = "ritamkn";
+        User usr = userDAO.getUserByLogin(login);
         if (usr!=null){
             log.info(" **************** My USER is not empty **************  :  " + usr.getLogin());
         }
         assertNotNull(usr);
-        assertEquals(101,usr.getIdUser());
+        assertEquals("ritamkn@yahoo.com",usr.getEmail());
         assertEquals("ritamkn",usr.getLogin());
+        assertEquals("ritamkn101",usr.getPassword());
+
+    }
+
+    @Test
+    void testCreateUser() throws Exception {
+        User usr = new User();
+        usr.setLogin("andreaowona");
+        usr.setPassword("andreaowona102");
+        usr.setEmail("andreaowona@yahoo.com");
+        userDAO.createNewUser(usr);
+        User user2 = userDAO.getUserByLogin("andreaowona");
+
+        assertNotNull(user2);
+        assertEquals("andreaowona",user2.getLogin());
+        assertEquals("andreaowona102",user2.getPassword());
+        assertEquals("andreaowona@yahoo.com",user2.getEmail());
+
 
     }
 

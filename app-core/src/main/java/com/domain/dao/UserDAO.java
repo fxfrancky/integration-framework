@@ -5,42 +5,55 @@ import com.domain.mybatis.factory.MyBatisSqlSessionFactory;
 import com.domain.mybatis.mappers.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
 import java.util.List;
 
 
-@Named
-@SessionScoped
-@Slf4j
-public class UserDAO  implements Serializable {
 
-   //private static final SqlSession sqlSession = MyBatisSqlSessionFactory.produceFactory().openSession();
-    private static final UserMapper userMapper= MyBatisSqlSessionFactory.produceFactory().openSession().getMapper(UserMapper.class);
+@Slf4j
+public class UserDAO {
+
+   private static final SqlSessionFactory sqlSessionFactory = MyBatisSqlSessionFactory.produceFactory();
+   //private static SqlSession sqlSession = MyBatisSqlSessionFactory.produceFactory().openSession();
+   //private static final UserMapper userMapper= sqlSession.getMapper(UserMapper.class);
 
     public List<User> findAllUsers() throws Exception {
         List<User> users = null;
-        try{
-           // UserMapper userMapper= sqlSession.getMapper(UserMapper.class);
+       try{
+           SqlSession sqlSession = sqlSessionFactory.openSession();
+           UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
             users = userMapper.selectUsers();
-        }catch (Exception e){
+       }catch (Exception e){
             log.info("UserDAO Exception  findAllUsers" + e.getMessage());
-        }
+            throw new Exception("UserDAO Exception  findAllUsers" + e.getMessage());
+      }
         return users;
     }
 
-    public User getUserByIdUser(Integer idUser) throws Exception {
+    public User getUserByLogin(String login) throws Exception {
         User usr = null;
         try{
-           // UserMapper userMapper= sqlSession.getMapper(UserMapper.class);
-            usr = userMapper.getUserByIdUser(idUser);
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            usr = userMapper.getUserByLogin(login);
         }catch (Exception e){
-            log.info("UserDAO Exception  grtUserByIdUser" + e.getMessage());
+            log.info("UserDAO Exception  getUserByLogin" + e.getMessage());
+            throw new Exception("UserDAO Exception  findAllUsers" + e.getMessage());
         }
         return usr;
+    }
+
+    public void createNewUser(User usr) throws Exception {
+        try {
+            SqlSession sqlSession = sqlSessionFactory.openSession();
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+            userMapper.insertNewUser(usr.getLogin(),usr.getPassword(),usr.getEmail());
+            sqlSession.commit();
+            sqlSession.close();
+        }catch (Exception e){
+            log.info("UserDAO Exception  createNewUser" + e.getMessage());
+            throw new Exception("UserDAO Exception  createNewUser" + e.getMessage());
+        }
     }
 }

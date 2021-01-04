@@ -6,8 +6,10 @@ package com.domain.mybatis.mappers;
 
 import com.domain.model.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 
 @Mapper
 public interface UserMapper {
@@ -16,11 +18,25 @@ public interface UserMapper {
      * Find every Users
      * @return
      */
-    List<User> selectUsers();
+    public List<User> selectUsers();
 
-    User getUserByIdUser(Integer idUser);
+    /**
+     * Get a user by login
+     * @param login
+     * @return
+     */
+    public User getUserByLogin(String login);
 
-//    @Select("select * from company where id = #{id}")
-//    Company getCompanyById(Integer id);
+    /**
+     * Create a user by every field
+     * @param login
+     * @param password
+     * @param email
+     */
+    public void insertNewUser(@Param("login")String login, @Param("password")String password, @Param("email")String email);
+
+
+
+
 
 }

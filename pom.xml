@@ -36,7 +36,7 @@
         <!--  tools  -->
         <tools.slf4j-api.version>1.7.25</tools.slf4j-api.version>
         <tools.guava.version>24.1-jre</tools.guava.version>
-        <tools.lombok.version>1.18.12</tools.lombok.version>
+        <tools.lombok.version>1.18.16</tools.lombok.version>
         <tools.apache-commons-lang.version>3.7</tools.apache-commons-lang.version>
         <tools.mapstruct.version>1.4.1.Final</tools.mapstruct.version>
         <!--  tests  -->
