@@ -3,7 +3,6 @@ package com.domain.dao;
 import com.domain.model.User;
 import com.domain.tools.CollectionsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +59,6 @@ public class UserDAOTest {
         usr.setEmail("andreaowona@yahoo.com");
         userDAO.createNewUser(usr);
         User user2 = userDAO.getUserByLogin("andreaowona");
-
         assertNotNull(user2);
         assertEquals("andreaowona",user2.getLogin());
         assertEquals("andreaowona102",user2.getPassword());
@@ -73,7 +71,6 @@ public class UserDAOTest {
         String login = "fxfrancky";
         User usr = userDAO.getUserByLogin(login);
         assertNotNull(usr);
-
         userDAO.deleteUserByLogin(login);
         User usrDeleted = userDAO.getUserByLogin(login);
         assertNull(usrDeleted);
@@ -107,7 +104,6 @@ public class UserDAOTest {
         logins.add("julesbene");
         logins.add("jordanowona");
         logins.add("andreaowona");
-
         userDAO.deleteAllUsers(logins);
         userDAO.insertAllUsers();
     }
