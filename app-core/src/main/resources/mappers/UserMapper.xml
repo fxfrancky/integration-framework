@@ -5,9 +5,6 @@
 
     <resultMap id="UserMap" type="com.domain.model.User" >
         <id  property="idUser" column="id_user" jdbcType="INTEGER" />
-        <!--        <result  property="login" column="LOGIN" jdbcType="VARCHAR" />-->
-        <!--        <result  property="password" column="PASSWORD" jdbcType="VARCHAR" />-->
-        <!--        <result  property="email" column="EMAIL" jdbcType="VARCHAR" />-->
     </resultMap>
 
 
@@ -24,9 +21,6 @@
 
 
     <insert id="insertNewUser" parameterType="User">
-<!--        <selectKey keyProperty="id_user" resultType="Integer" order="BEFORE">-->
-<!--            select NEXTVAL('public.user_id_user_seq')-->
-<!--        </selectKey>-->
         INSERT INTO public.user(
         login, password, email)
         VALUES (#{login}, #{password},  #{email});
@@ -35,12 +29,39 @@
         </selectKey>
     </insert>
 
-<!--    <insert id="insertUser" re-->
-<!--    -->
-<!--    @Insert("INSERT INTO MyBooks(Author, Title, Published, Remark) "-->
-<!--    + "VALUES(#{author}, #{title}, #{published}, #{remark})")-->
-<!--    Integer idUser, String login, String password, String email-->
+    <insert id="insertAllUsers" parameterType="java.util.ArrayList" useGeneratedKeys="true" keyProperty="idUser"  keyColumn="id_user">
+        INSERT INTO public.user(login, password, email)
+        VALUES
+            <foreach collection="usersList" item="user" separator=",">
+                (#{user.login}, #{user.password}, #{user.email})
+            </foreach>
+    </insert>
 
-<!--    nextval('user_id_user_seq'-->
-    
+    <delete id="deleteUserByLogin" parameterType="java.lang.String">
+        delete from public.user where login=#{login};
+    </delete>
+
+    <update id="updateUser" parameterType="User">
+        UPDATE public.user
+        <set>
+            <if test="password =! null">
+                password = #{password},
+            </if>
+            <if test="email =! null">
+                email=#{email},
+            </if>
+        </set>
+        WHERE login = #{login}
+    </update>
+
+
+    <delete id="deleteAllUsers" parameterType="java.util.ArrayList">
+
+        DELETE FROM public.user WHERE login in
+        <foreach collection="logins" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </delete>
+
 </mapper>
